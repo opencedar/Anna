@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Dice Probability\"\nauthor: \"Anna Hasselwander\"\ndate: \"4/3/2018\"\noutput: html_document\n---\n#Dice Probability\n\nWe are interested in understanding the most likely outcome of rolling a pair of fair dice n times. This web page was built using a language called \"R\", which is very useful for doing math and statistics. It was then \"knit\" into a webpage using an offshoot of this language called \"RMardkown\".\n\n\n\n```{r setup, include=FALSE}\nknitr::opts_chunk$set(echo = TRUE)\nlibrary(ggplot2)\nlibrary(scales)\n```\n\n##First we make two functions: One to simulate dice rolls, and another to plot them as a \"histogram\". A histogram is a kind of plot that shows the number of observations in a number of bins. In this case, each \"bin\" is a possible outcome of the role of two fair dice.\n\n```{r}\n\ndice <- function(n = 50) {\n  trials <- vector()\n  for(i in 1:n) {\n    a <- sample(1:6, 1)\n    b <- sample(1:6, 1)\n    c <- a+b\n    trials <- c(trials, c)\n  }\n  trials <- data.frame(trials)\n  return(trials)\n}\n\ntrial_50 <- dice(50)\n\nmakeDicePlot <- function(data) {\nggplot(data, aes(x = trials)) +  \n        geom_bar(aes(y = (..count..)/sum(..count..), color = trials)) + \n        scale_y_continuous(labels=percent) +\n        scale_x_continuous(breaks = c(1:12)) + \n        geom_text(aes( label = scales::percent(..prop..),\n                   y= ..prop.. ), stat= \"count\", vjust = -.5) +\n        labs(y = \"Percent\", x = \"Sum of Dice\")\n}\n```\n\n\n##N = 50\nFor a relatively small number of rolls, the distribution of probabilities is less precise than the \"population\" distribution.\n```{r}\n\n\nmakeDicePlot(trial_50)\n\n```\n\n##N = 250\nFor a medium-sized number of rolls, the distribution of rolls approximates the \"population\" distribution.\n\n```{r}\ntrial_250 <- dice(250)\nmakeDicePlot(trial_250)\n```\n\n\n##N = 50,000\nFor a more \"true\" simulation, approaching the population distribution, we can see the percentage of rolls in each bin. It won't vary much after this!\n```{r}\ntrial_50K <- dice(50000)\nmakeDicePlot(trial_50K)\n```\n\n\n##N = 1,000,000\nNow this takes a long time to simulate. How about ONE MILLION rolls???\n```{r}\nstart <- Sys.time()\ntrial_1M <- dice(1000000)\nmakeDicePlot(trial_1M)\ncat(paste(\"Elapsed Time = \", Sys.time() - start))\n```",
+    "created" : 1522795992596.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "429967129",
+    "id" : "18EE10BD",
+    "lastKnownWriteTime" : 1522799713,
+    "last_content_update" : 1522799713392,
+    "path" : "~/R/Anna/Anna Dice Trials.Rmd",
+    "project_path" : "Anna Dice Trials.Rmd",
+    "properties" : {
+        "last_setup_crc32" : "45F4CBC60636ead",
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
